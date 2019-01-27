@@ -49,7 +49,7 @@ func TestGetNonExistentUser(t *testing.T) {
 
 	json.Unmarshal(response.Body.Bytes(), &m)
 	if m["error"] != "User Not Found" {
-		t.Errorf("Expected the 'error' key of the response to be set  to 'User not found'. Got '%s'",
+		t.Errorf("Expected the 'error' key of the response to be set  to 'User Not Found'. Got '%s'",
 			m["error"])
 	}
 }
@@ -67,7 +67,7 @@ func TestCreateUser(t *testing.T) {
 	var m map[string]interface{}
 	json.Unmarshal(response.Body.Bytes(), &m)
 
-	if m["name"] != "test user" {
+	if m["name"] != "test" {
 		t.Errorf("Expected user name to be the 'test user'. Got '%v'",
 			m["name"])
 	}
@@ -141,7 +141,7 @@ func TestDeleteUser(t *testing.T) {
 
 	req, _ = http.NewRequest("GET", "/user/1", nil)
 	response = executeRequest(req)
-	checkResponseCode(t, http.StatusOK, response.Code)
+	checkResponseCode(t, http.StatusNotFound, response.Code)
 }
 
 func addUsers(count int) {
@@ -156,7 +156,6 @@ func addUsers(count int) {
 }
 
 func executeRequest(req *http.Request) *httptest.ResponseRecorder {
-	fmt.Println("req", req.Method)
 	rr := httptest.NewRecorder()
 	a.Router.ServeHTTP(rr, req)
 
